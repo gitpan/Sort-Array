@@ -54,33 +54,36 @@ DESCRIPTION
       How many columns in a line. Integer beginning at
       1 (not 0) (for better readability).
       e.g.: '4' = Four fields at one line. ($array[0..3])
-      --- Utilizable only in Sort_Table()
-      --- Must be declared
+      - Utilizable only in Sort_Table()
+      - Must be declared
 
     field
       Which column should be used for sorting. Integer
       beginning at 1 (not 0).
       e.g.: '4' = Sorting the fourth field. ($array[3])
-      --- Utilizable only in Sort_Table()
-      --- Must be declared
+      - Utilizable only in Sort_Table()
+      - Must be declared
 
     sorting
       In which order should be sorted.
       e.g.: 'ascending' or 'descending'
-      --- Utilizable in Sort_Table() and Discard_Duplicates()
-      --- Must be declared
+      - Utilizable in Sort_Table()
+      - Must be declared
+
+      - Utilizable in Discard_Duplicates()
+      - Can be declared (if empty, it does not sort the array)
 
     empty_fields
       Should empty fields removed
       e.g.: 'delete' or not specified
-      --- Utilizable only in Discard_Duplicates()
-      --- Can be declared
+      - Utilizable only in Discard_Duplicates()
+      - Can be declared
 
     structure
       Structure of that Array.
       e.g.: 'csv' or 'single'
-      --- Utilizable only in Sort_Table()
-      --- Must be declared
+      - Utilizable only in Sort_Table()
+      - Must be declared
 
     separator
       Which separator should be used? Only needed when
@@ -89,14 +92,14 @@ DESCRIPTION
       For ?+*{} as a separator you must mask it since
       it is a RegEx.
       e.g.: \? or \* ...
-      --- Utilizable only in Sort_Table()
-      --- Must be declared when using 'csv' or ';'
+      - Utilizable only in Sort_Table()
+      - Must be declared when using 'csv' or ';'
           will be used.
 
     data
       Reference to the array that should be sorted.
-      --- Utilizable in Sort_Table() and Discard_Duplicates()
-      --- Must be declared
+      - Utilizable in Sort_Table() and Discard_Duplicates()
+      - Must be declared
 
     If everything went right, Sort_Table() returns an array containing your
     sorted Array. The structure from the imput-array is kept although it's
@@ -104,7 +107,7 @@ DESCRIPTION
 
   Returncodes
 
-    If an error occurs, than will be returned an undefinied Array and set
+    If an error occurs, than will be returned an undefinied array and set
     $Sort::Array::error with one of the following code. Normally
     $Sort::Array::error is 0.
 
@@ -219,9 +222,16 @@ EXAMPLES
       Spanish
 
 BUGS
-    No Bugs known fo now. ;)
+    No Bugs known for now. ;)
 
 HISTORY
+    - 2001-08-23 / 0.25
+    Changed the Discard_Duplicates() function to discard duplicates and only
+    sort the array if wished. You can set <sorting> to 'asending',
+    'desending' or let them empty to disable sorting.
+
+    Some misspelling corrected.
+
     - 2001-08-17 / 0.24
     Error codes are no longer returned in an array (that array that contains
     the sorted Data). $Sort::Array::error is used with the code instead.

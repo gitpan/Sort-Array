@@ -22,7 +22,7 @@ use vars qw(@EXPORT_OK @ISA $VERSION $error);
 	Discard_Duplicates
 );
 
-$VERSION = '0.24';
+$VERSION = '0.25';
 
 #///////////////////////////////////////////////////////////////////////#
 #									#
@@ -32,13 +32,6 @@ sub Discard_Duplicates {
 	# Get the args and put them into a Hash.
     	my (%arg) = @_;
 	$error = 0;
-
-	# Check if <sorting> is set,
-	# else return error-code.
-	if ((! $arg{sorting}) && (($arg{sorting} ne 'ascending') || ($arg{sorting} ne 'descending'))) {
-		$error = 102;
-		return undef;
-	}
 
 	# Check for content that should be sorted,
 	# else return error-code.
@@ -51,21 +44,24 @@ sub Discard_Duplicates {
 	# Turn warnings off, because we do first a '<=>' and if that
 	# fails, we do a 'cmp'. And then a warning comes up.
 	# After working, we turn $^W to the same as before.
-	if ($^W == 1) {
+	if ($^W) {
 		$use_warn = $^W;
 		$^W = 0;
 	}
 
-	@_ = ();
+	# Find duplicates and sort them out.
 	my %seen = ();
-	my @unique = ();
+	my @unique = grep { ! $seen{$_}++ } @{$arg{data}};
+	%seen = ();
+
+	# Check if <sorting> is set, if empty do not sort them.
 	if ($arg{sorting} eq 'ascending') {
 		# Sorting content ascending order.
-		@unique = sort { $a <=> $b || $a cmp $b } grep { ! $seen{$_}++ } @{$arg{data}};
+		@unique = sort { $a <=> $b || $a cmp $b } @unique;
 	}
 	elsif ($arg{sorting} eq 'descending') {
 		# Sorting content descending order.
-		@unique = sort { $b <=> $a || $b cmp $a } grep { ! $seen{$_}++ } @{$arg{data}};
+		@unique = sort { $b <=> $a || $b cmp $a } @unique;
 	}
 
 	# Turn warnings to the same as before.
@@ -81,7 +77,8 @@ sub Discard_Duplicates {
 		}
 		@unique = @_;
 	}
-	return @unique;
+#	return @unique;
+	@{$arg{data}} = @unique;
 }
 
 #///////////////////////////////////////////////////////////////////////#
@@ -284,37 +281,40 @@ the sorted array.
  How many columns in a line. Integer beginning at
  1 (not 0) (for better readability).
  e.g.: '4' = Four fields at one line. ($array[0..3])
- --- Utilizable only in Sort_Table()
- --- Must be declared
+ - Utilizable only in Sort_Table()
+ - Must be declared
 
 =item field
 
  Which column should be used for sorting. Integer
  beginning at 1 (not 0).
  e.g.: '4' = Sorting the fourth field. ($array[3])
- --- Utilizable only in Sort_Table()
- --- Must be declared
+ - Utilizable only in Sort_Table()
+ - Must be declared
 
 =item sorting
 
  In which order should be sorted.
  e.g.: 'ascending' or 'descending'
- --- Utilizable in Sort_Table() and Discard_Duplicates()
- --- Must be declared
+ - Utilizable in Sort_Table()
+ - Must be declared
+
+ - Utilizable in Discard_Duplicates()
+ - Can be declared (if empty, it does not sort the array)
 
 =item empty_fields
 
  Should empty fields removed
  e.g.: 'delete' or not specified
- --- Utilizable only in Discard_Duplicates()
- --- Can be declared
+ - Utilizable only in Discard_Duplicates()
+ - Can be declared
 
 =item structure
 
  Structure of that Array.
  e.g.: 'csv' or 'single'
- --- Utilizable only in Sort_Table()
- --- Must be declared
+ - Utilizable only in Sort_Table()
+ - Must be declared
 
 =item separator
 
@@ -324,15 +324,15 @@ the sorted array.
  For ?+*{} as a separator you must mask it since
  it is a RegEx.
  e.g.: \? or \* ...
- --- Utilizable only in Sort_Table()
- --- Must be declared when using 'csv' or ';'
+ - Utilizable only in Sort_Table()
+ - Must be declared when using 'csv' or ';'
      will be used.
 
 =item data
 
  Reference to the array that should be sorted.
- --- Utilizable in Sort_Table() and Discard_Duplicates()
- --- Must be declared
+ - Utilizable in Sort_Table() and Discard_Duplicates()
+ - Must be declared
 
 =back
 
@@ -344,7 +344,7 @@ it's sorted. ;)
 
 =head2 Returncodes
 
-If an error occurs, than will be returned an undefinied Array and set
+If an error occurs, than will be returned an undefinied array and set
 $Sort::Array::error with one of the following code. Normally $Sort::Array::error
 is 0.
 
@@ -480,11 +480,19 @@ used to Sort::Array
 
 =head1 BUGS
 
-No Bugs known fo now. ;)
+No Bugs known for now. ;)
 
 
 
 =head1 HISTORY
+
+=item - 2001-08-23 / 0.25
+
+Changed the Discard_Duplicates() function to discard duplicates
+and only sort the array if wished. You can set <sorting> to
+'asending', 'desending' or let them empty to disable sorting.
+
+Some misspelling corrected.
 
 =item - 2001-08-17 / 0.24
 
