@@ -1,0 +1,12 @@
+Revision history for Perl extension Sort::Array.
+
+2001-08-17 / 0.24
+
+	Error codes are no longer returned in an array (that array that
+	contains the sorted Data). $Sort::Array::error is used with the
+	code instead.
+
+
+2001-07-28 / 0.23
+
+	- First beta-release, non-public
