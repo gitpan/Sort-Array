@@ -225,6 +225,10 @@ BUGS
     No Bugs known for now. ;)
 
 HISTORY
+    - 2001-08-25 / 0.26
+    File permission fixed, now anybody can extract the archive, not only the
+    user 'root'.
+
     - 2001-08-23 / 0.25
     Changed the Discard_Duplicates() function to discard duplicates and only
     sort the array if wished. You can set <sorting> to 'asending',

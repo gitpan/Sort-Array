@@ -22,7 +22,7 @@ use vars qw(@EXPORT_OK @ISA $VERSION $error);
 	Discard_Duplicates
 );
 
-$VERSION = '0.25';
+$VERSION = '0.26';
 
 #///////////////////////////////////////////////////////////////////////#
 #									#
@@ -485,6 +485,11 @@ No Bugs known for now. ;)
 
 
 =head1 HISTORY
+
+=item - 2001-08-25 / 0.26
+
+File permission fixed, now anybody can extract the archive, not
+only the user 'root'.
 
 =item - 2001-08-23 / 0.25
 
